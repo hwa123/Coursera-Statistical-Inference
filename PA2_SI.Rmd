@@ -1,0 +1,13 @@
+---
+title: "Statistical Inference: Course Project"
+output: 
+  html_document:
+    keep_md: true
+---
+Created by H.Wang on November 19, 2015
+
+
+## Basic Settings
+```{r qplot, fig.width = 4, fig.height=2, message= FALSE}
+echo= TRUE  # make scripts visible to others
+```

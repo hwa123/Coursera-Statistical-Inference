@@ -25,12 +25,7 @@ set.seed(5523028)
 # run the simulation in 1000*40 matrix
 exp_dist <- matrix(data= rexp(n*sim_num, lambda),nrow= sim_num)
 exp_dist_mean <- data.frame(means = apply(exp_dist, 1, mean))
-
-# histrogram of simulation results
-ggplot(exp_dist_mean, aes(means)) +  stat_bin(binwidth=0.1, color = 'white') 
 ```
-
-![](PA1_SI_files/figure-html/unnamed-chunk-1-1.png) 
 
 ## Sample Mean vs. Theoretical Mean
 
@@ -77,26 +72,13 @@ s_var
 As comparison, both variance are very close. Since variance is the square of the standard deviations, minor differences will be enhanced but are still pretty close. 
 
 ## Distribution
-Comparing the population means & standard deviation with a normal distribution of the expected values. Lines for the simulated and expected means are added. 
+Comparing the population means & standard deviation with a normal distribution of the expected values. Lines for the simulated and expected means are added.
 
-```r
-# plot histogram 
-hist(exp_dist_mean$mean, breaks=50, prob=TRUE,
-     main = "Histogram of Sample Means Distribution", xlab="means", col="white")
-# density of the averages of samples
-lines(density(exp_dist_mean$mean), col="red")
-# samples and theoretical center of distribution
-abline(v = c(1/lambda, mean(exp_dist_mean$means)), col = c("blue","red"), lty=c(2,1), lwd=c(3, 1))
-# theoretical density of the averages of samples
-xfit <- seq(min(exp_dist_mean$mean), max(exp_dist_mean$mean), length=100)
-yfit <- dnorm(xfit, mean=1/lambda, sd=(1/lambda/sqrt(n)))
-lines(xfit, yfit, pch=22, col="blue", lty=2, lwd = 3)
-# add legend
-legend('topright', c("simulation", "theoretical"), lty=c(1,2),lwd=c(1, 3), col=c("red", "blue"))
-```
-
-![](PA1_SI_files/figure-html/unnamed-chunk-4-1.png) 
+![](PA1_SI_files/figure-html/hs-1.png) 
 
 Therefore, the distribution of averages of 40 exponentials is centered at 5.0037045 and the same is close to the theoretical center of the distribution, which is $\lambda^{-1}$ = 5.
 
+![](PA1_SI_files/figure-html/Q3-1.png) 
+
+Because of the central limit theorem, the averages of samples follow normal distribution. The Q-Q plot suggests the distribution of 40 exponentials is very close to a normal distribution. 
 
