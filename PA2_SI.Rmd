@@ -1,8 +1,7 @@
 ---
 title: "Statistical Inference: Course Project"
 output: 
-  html_document:
-    keep_md: true
+  pdf_document
 ---
 Created by H.Wang on November 19, 2015
 
@@ -11,3 +10,55 @@ Created by H.Wang on November 19, 2015
 ```{r qplot, fig.width = 4, fig.height=2, message= FALSE}
 echo= TRUE  # make scripts visible to others
 ```
+
+## Description of the Problem
+
+Analyze the ToothGrowth data in the R datasets package, provide data summary and use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. 
+
+## Load Data and Perform Basic Exploratory Data Analysis
+```{r}
+# load the dataset
+library(datasets)
+data("ToothGrowth")
+
+# convert column dose to factor (same as supp)
+ToothGrowth$dose <- as.factor(ToothGrowth$dose)
+
+# Table Check
+str(ToothGrowth)
+nrow(ToothGrowth)
+```
+
+## Provide a basic summary of the data
+```{r}
+# summary for the dataset
+summary(ToothGrowth)
+
+# split of cases between different dose and supp level
+table(ToothGrowth$dose, ToothGrowth$supp)
+
+library(ggplot2)
+ggplot(data=ToothGrowth, aes(x=dose, y=len, fill=supp)) +
+geom_bar(stat="identity",) +  facet_grid(. ~ supp) +  xlab("Dose in Miligrams") + ylab("Tooth Length") + guides(fill=guide_legend(title="Supplement Type"))
+```
+
+There is a positive correlation between tooth length and the dose level of VC and OJ.
+
+
+## Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose
+
+Use 95% confidence intervals for two variables and the intercept are as follows:
+```{r}
+# linear regression for len vs dose and supp
+fit <- lm(len ~ dose + supp, data = ToothGrowth)
+# confidence intervals
+confint(fit)
+```
+
+The confidence level is 95% which means 95% of time the simulation results(coefficient estimation) will be in these ranges. All p-values are less than 0.05, rejecting the null hypothesis and suggesting that each variable explains a variability in tooth length. 
+
+```{r}
+summary(fit)
+```
+The intercept is `r fit$coefficients[[1]]`, meaning without supp the average tooth length will be `r fit$coefficients[[1]]` units. The coefficient of dose is `r fit$coefficients[[2]]` . As long as dose is increased by 1 mg (no change in supp) the tooth length would increase `r fit$coefficients[[2]]` units. The last one is for supp VC and it is negative (`r fit$coefficients[[4]]`), which could be interpreted as with delivery a given supp VC (without changing dose) the tooth length will drop `r -fit$coefficients[[4]]` units. We could also conclude that on average, delivery of supp OJ would increase the tooth length by `r -fit$coefficients[[4]]` units due to two category under supp.     
+
